@@ -1,23 +1,39 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import { setupCounter } from './counter'
+interface Photo {
+  id: number;
+  width: number;
+  height: number;
+  url: string;
+  photographer: string;
+  photographer_url: string;
+  photographer_id: string;
+  avg_color: string;
+  src: {
+    original: string;
+    large2x: string;
+    large: string;
+    medium: string;
+    small: string;
+    portrait: string;
+    landscape: string;
+    tiny: string;
+  };
+}
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+interface PhotoSearchAPIResult {
+  total_results: number;
+  page: number;
+  per_page: number;
+  photos: Photo[];
+  next_page: string;
+}
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+async function fetchImagesFromAPI(searchTerm:string, perPage:number): Promise<PhotoSearchAPIResult> {
+  const result = await fetch(`https://api.pexels.com/v1/search?query=${searchTerm}&per_page=${perPage}`,
+    {
+      headers: {
+        Authorization: import.meta.env.VITE_PEXELS_API_KEY,
+      }
+    });
+  const json = (await result.json()) as PhotoSearchAPIResult;
+  return json;
+}
