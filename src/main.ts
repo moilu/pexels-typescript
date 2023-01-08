@@ -1,4 +1,5 @@
 import { PhotoSearchAPIResult } from "./interfaces/PhotoSearchAPIResult";
+import { render, html } from "lit-html";
 
 async function fetchImagesFromAPI(searchTerm:string, perPage:number): Promise<PhotoSearchAPIResult> {
   const result = await fetch(`https://api.pexels.com/v1/search?query=${searchTerm}&per_page=${perPage}`,
@@ -12,5 +13,16 @@ async function fetchImagesFromAPI(searchTerm:string, perPage:number): Promise<Ph
 }
 
 fetchImagesFromAPI('dogs', 5).then((data) => {
-  console.log(data);
-})
+  const htmlToRender = html`
+  <h1>Results for 'dogs'</h1>
+  <ul>
+    ${data.photos.map((photo)=>{
+      return html`<li><img src=${ photo.src.small } /></li>`;
+    })}
+  </ul>`;
+  const div = document.getElementById('app');
+  if(!div) {
+    throw new Error('Could not find div app');
+  }
+  render(htmlToRender, div);  
+});
