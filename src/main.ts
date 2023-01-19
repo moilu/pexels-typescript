@@ -6,5 +6,5 @@ fetchImagesFromAPI('dogs', 5).then((data) => {
   } else {
     renderApp(null);
   }
-  // const htmlToRender = html``;
+
 });
