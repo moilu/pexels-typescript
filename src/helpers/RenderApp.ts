@@ -7,6 +7,9 @@ async function onFormSubmit(event: SubmitEvent) {
     return;
   }
   const formData = new FormData(event.target as HTMLFormElement);
+  const query = formData.get('search-query');
+  if(query) {  
+  }
 }
 
 export function renderApp(results: PhotoSearchAPIResult | null): void {
