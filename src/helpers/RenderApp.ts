@@ -1,6 +1,7 @@
 import { PhotoSearchAPIResult } from "../interfaces/PhotoSearchAPIResult";
 import { render, html, nothing } from "lit-html";
 import { fetchImagesFromAPI } from "./fetchImagesFromAPI";
+import { renderSinglePhoto } from "../components/SinglePhoto";
 
 async function onFormSubmit(event: SubmitEvent) {
   event.preventDefault();
@@ -9,7 +10,7 @@ async function onFormSubmit(event: SubmitEvent) {
   }
   const formData = new FormData(event.target as HTMLFormElement);
   const query = formData.get('search-query');
-  if(query) {  
+  if(query && typeof query === 'string') {  
     const results: PhotoSearchAPIResult = await fetchImagesFromAPI(query, 10);
     renderApp(results);
   }
@@ -29,7 +30,7 @@ export function renderApp(results: PhotoSearchAPIResult | null): void {
     <ul>
       ${results ? 
         results.photos.map((photo)=>{
-        return html`<li><img src=${ photo.src.small } /></li>`})
+        return renderSinglePhoto(photo)})
         : nothing
       }
     </ul>`;
