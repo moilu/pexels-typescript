@@ -1,9 +1,9 @@
 import { PhotoSearchAPIResult } from "../interfaces/PhotoSearchAPIResult";
 import { render, html, nothing } from "lit-html";
 import { fetchImagesFromAPI } from "./fetchImagesFromAPI";
-import { renderSinglePhoto } from "../components/SinglePhoto";
+import { SinglePhoto } from "../components/SinglePhoto";
 
-async function onFormSubmit(event: SubmitEvent) {
+export async function onFormSubmit(event: SubmitEvent) {
   event.preventDefault();
   if(!event.target) {
     return;
@@ -27,12 +27,10 @@ export function renderApp(results: PhotoSearchAPIResult | null): void {
       <input type="text" name="search-query" placeholder="dogs" />
       <input type="submit" value="Search">
     </form>
-    <ul>
-      ${results ? 
-        results.photos.map((photo)=>{
-        return renderSinglePhoto(photo)})
-        : nothing
-      }
-    </ul>`;
+    <ul>${
+      results 
+      ? results.photos.map((photo)=>{return SinglePhoto(photo)})
+      : nothing
+    }</ul>`;
     render(htmlToRender, div);
 }

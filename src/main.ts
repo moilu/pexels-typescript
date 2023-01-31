@@ -1,10 +1,4 @@
-import { fetchImagesFromAPI } from "./helpers/fetchImagesFromAPI";
 import { renderApp } from "./helpers/renderApp";
+import "./style.css";
 
-fetchImagesFromAPI('dogs', 5).then((data) => {
-  if(data) {
-    renderApp(data);
-  } else {
-    renderApp(null);
-  }
-});
+renderApp(null);
